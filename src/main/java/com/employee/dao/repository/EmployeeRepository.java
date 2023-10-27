@@ -1,0 +1,26 @@
+
+package com.employee.dao.repository;
+
+import com.employee.api.v1.model.dto.EmployeeSearchDto;
+import com.employee.dao.entity.Employee;
+import com.employee.dao.entity.QEmployee;
+import com.querydsl.core.types.dsl.StringPath;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
+import org.springframework.data.querydsl.binding.QuerydslBindings;
+ 
+ 
+ /**
+ * @author Satya Kaveti
+ */
+
+public interface EmployeeRepository extends JpaRepository<Employee, Long>, EmployeeRepositoryCustom,
+		QuerydslPredicateExecutor<Employee>,
+		QuerydslBinderCustomizer<QEmployee> {
+
+	@Override
+	default void customize(QuerydslBindings bindings, QEmployee root) {
+		bindings.bind(String.class).first((StringPath path, String value) -> path.containsIgnoreCase(value));
+	}
+}
