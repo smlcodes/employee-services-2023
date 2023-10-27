@@ -1,7 +1,7 @@
 # Employee Services 2023
 
 ##  Authentication
-- In post man you can see XXXXUSERID required. 
+- In post man you can see -USERID required. 
 - That is Configured in SecurityConfig.java
 
 
