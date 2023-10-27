@@ -11,12 +11,19 @@ import com.employee.service.EmployeeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.history.Revision;
+import org.springframework.data.history.RevisionSort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -79,5 +86,25 @@ public class EmployeeServiceImpl implements EmployeeService {
             log.error("Error while deleting", ex);
             throw ex;
         }
+    }
+
+    @Override
+    public List<EmployeeDto> getEmployeeHistoryById(Long id, Pageable pageRequest) {
+        if (!employeeRepository.findById(id).isPresent()) {
+            throw new EntityNotFoundException(Employee.class, id);
+        }
+        List<EmployeeDto> employeeHistoryDtoList = null;
+        try {
+            Pageable pageable = PageRequest.of(pageRequest.getPageNumber(), pageRequest.getPageSize(), RevisionSort.desc());
+            Page<Revision<Long, Employee>> employeeRevisions = employeeRepository.findRevisions(id, pageable);
+
+            employeeHistoryDtoList = employeeRevisions.stream().map((p) ->
+                    employeeMapper.toDto(p.getEntity())
+            ).collect(Collectors.toList());
+
+        } catch (DataAccessException ex) {
+           ex.printStackTrace();
+        }
+        return employeeHistoryDtoList;
     }
 }

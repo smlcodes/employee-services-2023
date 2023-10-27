@@ -9,13 +9,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.querydsl.binding.QuerydslBinderCustomizer;
 import org.springframework.data.querydsl.binding.QuerydslBindings;
- 
- 
- /**
+import org.springframework.data.repository.history.RevisionRepository;
+
+
+/**
  * @author Satya Kaveti
  */
 
-public interface EmployeeRepository extends JpaRepository<Employee, Long>, EmployeeRepositoryCustom,
+public interface EmployeeRepository extends RevisionRepository<Employee, Long, Long>, JpaRepository<Employee, Long>, EmployeeRepositoryCustom,
 		QuerydslPredicateExecutor<Employee>,
 		QuerydslBinderCustomizer<QEmployee> {
 

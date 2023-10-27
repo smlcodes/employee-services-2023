@@ -12,10 +12,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
- 
 
- 
- /**
+import java.util.List;
+
+
+/**
  * @author Satya Kaveti
  */
 
@@ -54,5 +55,9 @@ public class EmployeeController {
         this.employeeService.delete(id);
     }
 
-
+    @ApiOperation("Get Employee Version History By Id")
+    @GetMapping("/{id}/history")
+    public List<EmployeeDto> getEmployeeHistoryById(@PathVariable("id") Long id, Pageable pageable) {
+        return employeeService.getEmployeeHistoryById(id, pageable);
+    }
 }

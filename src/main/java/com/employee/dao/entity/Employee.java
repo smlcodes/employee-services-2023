@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import javax.persistence.*;
 import java.util.List;
@@ -21,9 +23,9 @@ import java.util.List;
 @Entity
 @Table(name = "employee")
 @Accessors(chain = true)
+@Audited
 @EntityListeners(AuditingEntityListener.class)
-
-public class Employee { 
+public class Employee extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -41,7 +43,8 @@ public class Employee {
     private Account account;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "employee_id") 
+    @JoinColumn(name = "employee_id")
+    @NotAudited
     private List<Document> documentList;
 
 }

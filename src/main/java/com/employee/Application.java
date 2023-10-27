@@ -8,6 +8,10 @@ import org.springframework.context.event.EventListener;
 import org.springframework.core.env.Environment;
 import org.springframework.context.annotation.Configuration;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.envers.repository.config.EnableEnversRepositories;
+import org.springframework.data.envers.repository.support.EnversRevisionRepositoryFactoryBean;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import javax.annotation.PostConstruct;
 
@@ -19,6 +23,9 @@ import javax.annotation.PostConstruct;
 @SpringBootApplication
 @Configuration
 @Slf4j
+@EnableJpaAuditing
+@EnableEnversRepositories
+@EnableJpaRepositories(basePackages = {"com.employee"}, repositoryFactoryBeanClass = EnversRevisionRepositoryFactoryBean.class)
 public class Application {
 
 	public static void main(String[] args) {
@@ -41,9 +48,9 @@ public class Application {
 		log.info("\n Swagger : http://localhost:"+env.getProperty("server.port")+"/empapp/swagger-ui/index.html");
 	}
 
-	@PostConstruct
+/*	@PostConstruct
 	void afterStartup(){
 		log.info("\n \nAfter StartUp");
 
-	}
+	}*/
 }

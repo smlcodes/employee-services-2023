@@ -7,7 +7,13 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 
+import javax.persistence.Column;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -32,5 +38,12 @@ public class EmployeeDto {
     private AccountDto account;
 
     private List<DocumentDto> documentList;
+
+
+    private String createdBy;
+    private String modifiedBy;
+
+    private Date createdDate;
+    private Date modifiedDate;
 
 }

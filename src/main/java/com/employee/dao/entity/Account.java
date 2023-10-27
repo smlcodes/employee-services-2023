@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.hibernate.envers.Audited;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.format.annotation.DateTimeFormat;
 import javax.persistence.*;
@@ -23,9 +24,9 @@ import com.employee.ApplicationConstants;
 @Entity
 @Table(name = "account")
 @Accessors(chain = true)
+@Audited
 @EntityListeners(AuditingEntityListener.class)
- 
-public class Account { 
+public class Account {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;

@@ -54,7 +54,7 @@ spring:
       hibernate:
         default_schema: "empdb"
         jdbc.lob.non_contextual_creation: true
-        integration.envers.enabled: false #TODO should be true
+        integration.envers.enabled: true #TODO should be true
       org.hibernate:
         naming-strategy: org.springframework.boot.orm.jpa.hibernate.SpringNamingStrategy
         envers:
