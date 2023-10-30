@@ -1,10 +1,14 @@
-
 package com.employee.api.v1;
 
 import com.employee.ApplicationConstants;
-import com.employee.api.v1.model.dto.*;
+import com.employee.api.v1.model.dto.EmployeeDto;
+import com.employee.api.v1.model.dto.EmployeeSearchDto;
+import com.employee.api.v1.model.dto.EmployeeSearchResultsDto;
+import com.employee.api.v1.model.dto.RequestDto;
 import com.employee.service.EmployeeService;
-import io.swagger.annotations.*;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +44,7 @@ public class EmployeeController {
     @ApiOperation("Create a new Employee or update exist ")
     @PostMapping
     public EmployeeDto save(@RequestParam(name = "id", required = false) Long id, @RequestBody EmployeeDto employeeDto) {
-        return employeeService.save(employeeDto, id); 
+        return employeeService.save(employeeDto, id);
     }
 
     @GetMapping("/{id}")
@@ -60,4 +64,11 @@ public class EmployeeController {
     public List<EmployeeDto> getEmployeeHistoryById(@PathVariable("id") Long id, Pageable pageable) {
         return employeeService.getEmployeeHistoryById(id, pageable);
     }
+
+    @ApiOperation("Email All Employees Data on Scheduled Time")
+    @PostMapping("/schedule")
+    public void scheduleTask(@RequestBody RequestDto requestDto) {
+        employeeService.scheduleTask(requestDto.getCron());
+    }
+
 }

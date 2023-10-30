@@ -1,7 +1,8 @@
-
 package com.employee.service;
 
-import com.employee.api.v1.model.dto.*;
+import com.employee.api.v1.model.dto.EmployeeDto;
+import com.employee.api.v1.model.dto.EmployeeSearchDto;
+import com.employee.api.v1.model.dto.EmployeeSearchResultsDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -18,4 +19,6 @@ public interface EmployeeService {
     void delete(Long id);
 
     List<EmployeeDto> getEmployeeHistoryById(Long id, Pageable pageable);
+
+    void scheduleTask(String cron);
 }
