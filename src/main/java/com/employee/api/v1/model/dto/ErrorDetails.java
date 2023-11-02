@@ -5,8 +5,11 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 @Getter @Setter
 @Builder
+@XmlTransient
 public class ErrorDetails {
   
   private HttpStatus code;

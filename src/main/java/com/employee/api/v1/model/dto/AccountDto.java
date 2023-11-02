@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.xml.bind.annotation.*;
 import java.time.LocalDate;
 
 
@@ -24,14 +25,19 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class AccountDto {
  
     private Long id;
 
+    @XmlElement
     private String email;
 
+    @XmlElement
     private String password;
 
+    @XmlTransient
     @DateTimeFormat(pattern = ApplicationConstants.DATE_FORMAT)
     private LocalDate dob;
 

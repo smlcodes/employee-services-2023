@@ -1,4 +1,3 @@
-
 package com.employee.api.v1.model.dto;
 
 
@@ -7,12 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import javax.persistence.Column;
+import javax.xml.bind.annotation.*;
 import java.util.Date;
 import java.util.List;
 
@@ -25,18 +20,26 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class EmployeeDto {
- 
+
+    @XmlElement(required = true)
     private Long id;
 
+    @XmlElement(required = true)
     private String name;
 
+    @XmlElement(name = "salary", required = true)
     private Double salary;
 
+    @XmlElement
     private String city;
 
+    @XmlElement(required = true)
     private AccountDto account;
 
+    @XmlElement
     private List<DocumentDto> documentList;
 
 

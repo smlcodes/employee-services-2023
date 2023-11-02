@@ -369,7 +369,7 @@
 				<configuration>
 					<sources>
 						<!-- Update XML DTOs location here -->
-						<source>src/main/java/com/dpworld/declaration/api/v1/model/dto/xml</source>
+						<source>src/main/java/com/employee/api/v1/model/dto</source>
 					</sources>
 				</configuration>
 			</plugin>

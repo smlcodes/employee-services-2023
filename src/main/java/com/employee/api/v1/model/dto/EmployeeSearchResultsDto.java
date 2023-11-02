@@ -10,10 +10,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
- 
+import javax.xml.bind.annotation.XmlTransient;
 
- 
- /**
+
+/**
  * @author Satya Kaveti
  */
 
@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@XmlTransient
 public class EmployeeSearchResultsDto {
  
     private String name;

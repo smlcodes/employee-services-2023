@@ -2,7 +2,10 @@ package com.employee.api.v1.model.dto;
 
 import lombok.Data;
 
+import javax.xml.bind.annotation.XmlTransient;
+
 @Data
+@XmlTransient
 public class ErrorResponseDto {
 	/*
 	 * Error Section: Denotes in which section of the original message the error

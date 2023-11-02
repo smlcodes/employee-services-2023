@@ -2,6 +2,7 @@ package com.employee.api.v1.model.dto;
 
 import lombok.*;
 
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 
 @Getter
@@ -10,6 +11,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@XmlTransient
 public class ErrorMessage implements Serializable {
 	
 	private String errorCode;
