@@ -29,6 +29,8 @@ public interface EmployeeMapper extends BaseMapper {
     @Mapping(target = "modifiedDate", source = "modifiedDate", qualifiedByName = "longToDate")
     EmployeeDto toDto(Employee entity);
 
+    List<EmployeeDto> mapEntityListToDtoListForEmployee(List<Employee> employees);
+
     AccountDto mapEntityToDtoAccount(Account account);
 
     Account mapDtoToEntityAccount(AccountDto accountDtos);
@@ -58,4 +60,6 @@ public interface EmployeeMapper extends BaseMapper {
         }
         return date.getTime();
     }
+
+
 }

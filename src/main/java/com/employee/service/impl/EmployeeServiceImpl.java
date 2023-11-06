@@ -11,6 +11,7 @@ import com.employee.exception.BusinessException;
 import com.employee.exception.EntityNotFoundException;
 import com.employee.service.EmployeeService;
 import com.employee.utils.EmailUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionException;
@@ -58,6 +59,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmailUtil emailUtil;
 
+    private final ObjectMapper objectMapper;
+
 
     @Override
     public Page<EmployeeSearchResultsDto> searchAllEmployee(Pageable pageRequest, EmployeeSearchDto searchCriteria) {
@@ -85,6 +88,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     public EmployeeDto getEmployeeById(Long id) {
         var entity = employeeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Employee.class, id));
         return employeeMapper.toDto(entity);
+    }
+
+    @Override
+    public List<EmployeeDto> getAllEmployees() {
+        List<Employee> employees = employeeRepository.findAll();
+        return employeeMapper.mapEntityListToDtoListForEmployee(employees);
     }
 
 
@@ -147,6 +156,7 @@ public class EmployeeServiceImpl implements EmployeeService {
         scheduledTasks.put(taskId, future);
         log.info("Task ID ", taskId);
     }
+
 
 
     private EmailDto getEmailData() {

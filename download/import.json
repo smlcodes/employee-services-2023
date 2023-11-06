@@ -1,0 +1,17 @@
+{
+  "name": "Satya",
+  "salary": 25000,
+  "city": "HYD",
+  "account": {
+    "email": "satya@gmail.com",
+    "password": "password",
+    "dob": "1990-10-27"
+  },
+  "documentList": [
+    {
+      "proofType": "VOTERID",
+      "docName": "VoterID",
+      "docUrl": "voterIDURL"
+    }
+  ]
+}
