@@ -1,19 +1,21 @@
 package com.employee.api.v1.model.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.http.HttpStatus;
 
 import javax.xml.bind.annotation.XmlTransient;
+import java.util.List;
 
-@Getter @Setter
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @XmlTransient
 public class ErrorDetails {
-  
+
   private HttpStatus code;
 
-  private Object message;
+  private List<String> message;
 
 }

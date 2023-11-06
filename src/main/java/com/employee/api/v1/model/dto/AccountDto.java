@@ -12,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.Email;
 import javax.xml.bind.annotation.*;
 import java.time.LocalDate;
 
@@ -32,6 +33,7 @@ public class AccountDto {
     private Long id;
 
     @XmlElement
+    @Email
     private String email;
 
     @XmlElement

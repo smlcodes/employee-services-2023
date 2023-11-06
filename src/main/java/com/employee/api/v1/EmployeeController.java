@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 
@@ -43,7 +44,7 @@ public class EmployeeController {
 
     @ApiOperation("Create a new Employee or update exist ")
     @PostMapping
-    public EmployeeDto save(@RequestParam(name = "id", required = false) Long id, @RequestBody EmployeeDto employeeDto) {
+    public EmployeeDto save(@RequestParam(name = "id", required = false) Long id, @RequestBody @Valid  EmployeeDto employeeDto) {
         return employeeService.save(employeeDto, id);
     }
 
