@@ -1,3 +1,4 @@
+/*
 package com.employee.support.security;
 
 import java.util.Collections;
@@ -13,6 +14,7 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 
 import lombok.extern.slf4j.Slf4j;
 
+*/
 /**
  * Spring Security UserDetails Service class for pre-authenticated requests.
  * <p>
@@ -22,11 +24,13 @@ import lombok.extern.slf4j.Slf4j;
  * This class is responsible for applying verification of the token and loading the associated user and 
  * roles. No authentication is actually performed here
  *
- */
+ *//*
+
 @Slf4j
 public class AuthorizationUserDetailsService implements AuthenticationUserDetailsService<PreAuthenticatedAuthenticationToken> {
 
-	/**
+	*/
+/**
 	 * Load and return a UserDetails instance of the Pre-Autenticated user token.
 	 * <p>
 	 * Caching is enabled here since the Security Config is Stateless (SessionCreationPolicy.STATELESS),
@@ -35,7 +39,8 @@ public class AuthorizationUserDetailsService implements AuthenticationUserDetail
 	 * <p>
 	 * NOTE: Ensure the caching configuration declares the Cache name of <b>PreAuthUsers</b>
 	 * 
-	 */
+	 *//*
+
 	@Override
 	@Cacheable(value = "PreAuthUsers", key = "#token")
 	public UserDetails loadUserDetails(PreAuthenticatedAuthenticationToken token) throws UsernameNotFoundException {
@@ -48,3 +53,4 @@ public class AuthorizationUserDetailsService implements AuthenticationUserDetail
 	}
 
 }
+*/

@@ -46,6 +46,7 @@ public class Application {
         );
 
         log.info("\n Swagger : http://localhost:" + env.getProperty("server.port") + "/empapp/swagger-ui/index.html");
+        log.info("Basic base64(username:password) :dXNlcjpwYXNzd29yZA==");
     }
 
 /*	@PostConstruct

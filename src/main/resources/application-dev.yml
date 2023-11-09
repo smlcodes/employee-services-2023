@@ -119,6 +119,15 @@ redis:
     master: redis-sentinel
     expiryTTL: 300000
 
+# keycloak Authentication
+keycloak:
+  realm: smlcodes
+  auth-server-url: https://lemur-11.cloud-iam.com/auth/realms/smlcodes
+  resource: springboot_app
+  credentials:
+    secret: NkFUfAkqEp0wkVpFyHFbzvfU27cmjfen
+  use-resource-role-mappings: true
+
 # Application specific properties
 app:
   maxSequence: 99

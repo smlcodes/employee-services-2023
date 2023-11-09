@@ -1,89 +1,57 @@
 package com.employee.support.config;
 
-import java.util.Collections;
-
-import com.employee.ApplicationConstants;
-import com.employee.support.security.AuthorizationUserDetailsService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.AuthenticationUserDetailsService;
-import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationProvider;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
-import org.springframework.security.web.authentication.preauth.RequestHeaderAuthenticationFilter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.web.SecurityFilterChain;
 
-/**
- * Security configuration based on the Spring Security setup.
- * <p>
- * Since Micro-Services do not participate in authentication of users, and the authentication is delegated
- * to an external Authentication Server, then this configuration wires the Pre-Authentication settings required 
- * to extract the authenticated user token from the header.
- * <p>
- * By default, all APIs at path /api will be secured against the pre-authenticated header.
- * 
- * @author Satya
- */
 @Configuration
 @EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-
-	@Override
-	protected void configure(HttpSecurity http) throws Exception {
-		// Configure Security Policy
-		http			
-			.csrf().disable()	// CSRF does not apply in REST app
-			.addFilterAfter(this.preAuthenticationFilter(), RequestHeaderAuthenticationFilter.class)
-			.authorizeRequests()
-				// Authenticate /api/** requests - Will use the RequestHeaderPreAuthenticationFilter
-				.antMatchers(ApplicationConstants.API_BASE + "v*/**").hasAuthority(ApplicationConstants.PREAUTH_USER_ROLE) //authenticated()
-			.and()
-				// REST API is stateless, hence no session. Caching will be used instead
-				.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-			.and()
-				// For Pre-Authenticated setup use a 403 Forbidden entry point
-				.exceptionHandling()
-					.authenticationEntryPoint(new Http403ForbiddenEntryPoint())
-			.and()
-				.headers().frameOptions().disable();	// FrameOptions do not apply in REST app				
-	}
-
-    @Override
-    protected AuthenticationManager authenticationManager() {
-        return new ProviderManager(Collections.singletonList(this.authenticationProvider()));
-    }
-
-	@Bean
-	public RequestHeaderAuthenticationFilter preAuthenticationFilter() {
-		RequestHeaderAuthenticationFilter preAuthenticationFilter = new RequestHeaderAuthenticationFilter();
-		preAuthenticationFilter.setPrincipalRequestHeader(ApplicationConstants.PREAUTH_HEADER_LABEL);
-		preAuthenticationFilter.setCredentialsRequestHeader(ApplicationConstants.PREAUTH_HEADER_LABEL);
-		preAuthenticationFilter.setAuthenticationManager(this.authenticationManager());
-		// Turn off exceptions since we have configured a 403 for the security policy
-		preAuthenticationFilter.setExceptionIfHeaderMissing(false);
-
-		return preAuthenticationFilter;
-	}
-
-
+public class SecurityConfig {
     @Bean
-    public AuthenticationProvider authenticationProvider() {
-        PreAuthenticatedAuthenticationProvider authenticationProvider = new PreAuthenticatedAuthenticationProvider();
-        authenticationProvider.setPreAuthenticatedUserDetailsService(this.userDetailsServiceWrapper());
-        // Turn off exceptions since we have configured a 403 for the security policy
-        authenticationProvider.setThrowExceptionWhenTokenRejected(false);
-
-        return authenticationProvider;
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeRequests()
+                .antMatchers("/public/**").permitAll()
+                .antMatchers("/empapp/api/v1/**").authenticated()  // Secure paths starting with "/empapp/api/v1/"
+                .anyRequest().permitAll()  // Allow other requests
+                .and()
+                .httpBasic().and()
+                .formLogin().and().csrf().disable();;
+        return http.build();
     }
 
     @Bean
-    public AuthenticationUserDetailsService<PreAuthenticatedAuthenticationToken> userDetailsServiceWrapper() {
-        return new AuthorizationUserDetailsService();
-    }      
+    public UserDetailsService userDetailsService() {
+        UserDetails userDetails = User.withDefaultPasswordEncoder()
+                .username("user")
+                .password("password")
+                .roles("USER")
+                .build();
+
+        return new InMemoryUserDetailsManager(userDetails);
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
+        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
+        return new ProviderManager(authenticationProvider);
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    }
 }
