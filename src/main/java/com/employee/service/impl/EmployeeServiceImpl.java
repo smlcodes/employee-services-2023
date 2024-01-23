@@ -16,6 +16,8 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -47,20 +49,16 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class EmployeeServiceImpl implements EmployeeService {
 
+    private final ObjectMapper objectMapper;
     @Autowired
     private EmployeeRepository employeeRepository;
     @Autowired
     private EmployeeMapper employeeMapper;
-
     @Autowired
     private TaskScheduler taskScheduler;
     private Map<String, ScheduledFuture<?>> scheduledTasks;
-
     @Autowired
     private EmailUtil emailUtil;
-
-    private final ObjectMapper objectMapper;
-
 
     @Override
     public Page<EmployeeSearchResultsDto> searchAllEmployee(Pageable pageRequest, EmployeeSearchDto searchCriteria) {
@@ -85,25 +83,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
     @Override
+    @Cacheable(value = "employees", key = "#id")
     public EmployeeDto getEmployeeById(Long id) {
         var entity = employeeRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(Employee.class, id));
         return employeeMapper.toDto(entity);
     }
 
     @Override
+    @Cacheable(value = "employees")
     public List<EmployeeDto> getAllEmployees() {
         List<Employee> employees = employeeRepository.findAll();
         return employeeMapper.mapEntityListToDtoListForEmployee(employees);
     }
 
 
-    private Employee getEmployee(Long employeeId, Boolean isCreateRequest) {
-        Employee employee = isCreateRequest ? new Employee() : this.employeeRepository.findById(employeeId).orElseThrow(() -> new EntityNotFoundException(Employee.class, employeeId));
-        return employee;
-    }
-
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @CacheEvict(cacheNames = "employees", allEntries = true)
     public void delete(Long employeeId) {
         try {
             var entity = this.employeeRepository.findById(employeeId).orElseThrow(() -> new EntityNotFoundException(Employee.class, employeeId));
@@ -112,6 +108,11 @@ public class EmployeeServiceImpl implements EmployeeService {
             log.error("Error while deleting", ex);
             throw ex;
         }
+    }
+
+    private Employee getEmployee(Long employeeId, Boolean isCreateRequest) {
+        Employee employee = isCreateRequest ? new Employee() : this.employeeRepository.findById(employeeId).orElseThrow(() -> new EntityNotFoundException(Employee.class, employeeId));
+        return employee;
     }
 
     @Override
@@ -156,7 +157,6 @@ public class EmployeeServiceImpl implements EmployeeService {
         scheduledTasks.put(taskId, future);
         log.info("Task ID ", taskId);
     }
-
 
 
     private EmailDto getEmailData() {
