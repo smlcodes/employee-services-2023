@@ -11,6 +11,7 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.*;
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -25,7 +26,7 @@ import java.util.List;
 @Builder
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class EmployeeDto {
+public class EmployeeDto implements Serializable {
 
     @XmlElement(required = true)
     private Long id;

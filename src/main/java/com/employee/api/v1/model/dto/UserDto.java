@@ -11,6 +11,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.Email;
 import javax.xml.bind.annotation.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 
@@ -25,7 +26,7 @@ import java.time.LocalDate;
 @Builder
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.FIELD)
-public class UserDto {
+public class UserDto implements Serializable {
  
     private Long id;
 

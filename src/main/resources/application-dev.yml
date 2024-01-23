@@ -65,10 +65,16 @@ spring:
             non_contextual_creation: true
             show-sql: false
           time_zone: UTC
-  cache:
-    jcache:
+  #cache:
+    #jcache:
       # Location of the ehcache configuration file. For instance, `classpath:ext/ehcache.xml` or `file:/path/ehcache.xml`.
-      config: classpath:ext/ehcache.xml
+    #  config: classpath:ext/ehcache.xml
+  cache:
+    type: redis
+    host: localhost
+    port: 6379
+    redis:
+      time-to-live: 60000
   mail:
     host:
     port: 0

@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
 
 /**
  * @author satyakaveti
@@ -11,7 +12,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Data
 @Builder
 @XmlTransient
-public class EmailDto {
+public class EmailDto implements Serializable {
     String from;
     String subject;
     String body;
