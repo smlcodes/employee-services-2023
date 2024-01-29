@@ -4,7 +4,9 @@ package com.employee.api.v1;
 import com.employee.ApplicationConstants;
 import com.employee.api.v1.model.dto.UserDto;
 import com.employee.api.v1.model.mapper.UserMapper;
+import com.employee.exception.BusinessException;
 import com.employee.service.UserService;
+import com.employee.utils.UserCsvUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -58,6 +63,28 @@ public class UserController {
     @DeleteMapping("{id}")
     public void delete(@PathVariable("id") Long id) {
         this.userService.delete(id);
+    }
+
+
+    @PostMapping("/upload")
+    public Object uploadFile(@RequestBody MultipartFile file, @RequestParam("isBatch") Boolean isBatch) {
+        if (file.isEmpty()) {
+            throw new BusinessException("File is Empty");
+        }
+
+        if(isBatch)
+            return userService.batchUploadUsers(file);
+        else
+            return userService.uploadUsers(file);
+    }
+
+
+    @GetMapping("/download")
+    public void exportUsersToCsv(HttpServletResponse response) throws IOException {
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=\"users.csv\"");
+        List<UserDto> users = userService.getAllUsers();
+        UserCsvUtil.export(response.getWriter(), users);
     }
 
 }

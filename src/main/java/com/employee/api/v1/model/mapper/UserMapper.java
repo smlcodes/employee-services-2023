@@ -22,9 +22,9 @@ public interface UserMapper extends BaseMapper {
 
     UserDto toDto(User entity);
 
-    List<UserDto> mapEntityListToDtoListForUser(List<User> users);
+    List<UserDto> toUserDtoList(List<User> users);
 
- 
+    List<User> toUserEntityList(List<UserDto> users);
 
  
 

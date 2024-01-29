@@ -17,6 +17,11 @@ server:
     include-exception: true
 
 spring:
+  batch:
+    jdbc:
+      initialize-schema: ALWAYS #To create spring_batch db tables
+    job:
+      enabled: false #To prevent automatic execution of Job at Startup
   config:
     location: "file:./config/" # Config file locations that replace the defaults.
   servlet:
@@ -88,6 +93,8 @@ spring:
     web:
       pageable:
         max-page-size: 100
+
+
 
 # Logging setup
 logging:

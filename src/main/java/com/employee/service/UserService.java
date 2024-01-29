@@ -2,7 +2,9 @@ package com.employee.service;
 
 
 import com.employee.api.v1.model.dto.UserDto;
+import org.springframework.batch.core.BatchStatus;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -16,4 +18,7 @@ public interface UserService {
 
     List<UserDto> getAllUsers();
 
+    List<UserDto> uploadUsers(MultipartFile file);
+
+    BatchStatus batchUploadUsers(MultipartFile file);
 }
