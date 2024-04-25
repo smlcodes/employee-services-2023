@@ -1,7 +1,6 @@
 
 package com.employee.dao.repository;
 
-import com.employee.api.v1.model.dto.EmployeeSearchDto;
 import com.employee.dao.entity.Employee;
 import com.employee.dao.entity.QEmployee;
 import com.querydsl.core.types.dsl.StringPath;

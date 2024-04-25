@@ -1,5 +1,6 @@
 package com.employee;
 
+import com.employee.constants.DepartmentEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +15,8 @@ import org.springframework.data.envers.repository.support.EnversRevisionReposito
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
+
+import javax.annotation.PostConstruct;
 
 /**
  * Main Application class
@@ -51,9 +54,24 @@ public class Application {
         log.info("Basic base64(username:password) :dXNlcjpwYXNzd29yZA==");
     }
 
-/*	@PostConstruct
+	@PostConstruct
 	void afterStartup(){
 		log.info("\n \nAfter StartUp");
 
-	}*/
+        //Checking Enum
+        enumChecking();
+
+	}
+
+    public static void enumChecking(){
+        log.info("Printing Enums");
+        log.info("CSE : "+DepartmentEnum.CSE.getCode()+", Value: "+DepartmentEnum.CSE.getLabel());
+        log.info("ECE : "+DepartmentEnum.ECE.getCode()+", Value: "+DepartmentEnum.ECE.getLabel());
+        log.info("Value by code MBBS: "+DepartmentEnum.getDepartmentByCode("MBBS"));
+
+        DepartmentEnum.CSE.print();
+        DepartmentEnum.MBBS.print();
+    }
+
+
 }

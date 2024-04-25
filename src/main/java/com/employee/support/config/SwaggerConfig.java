@@ -1,14 +1,10 @@
 package com.employee.support.config;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.employee.ApplicationConstants;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.Pageable;
-
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.ParameterBuilder;
@@ -20,6 +16,9 @@ import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Swagger2 configuration. SpringBoot will auto-bootstrap and generate fully working Swagger API specs for this Module.

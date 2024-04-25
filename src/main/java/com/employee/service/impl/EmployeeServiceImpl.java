@@ -1,6 +1,6 @@
 package com.employee.service.impl;
 
-import com.employee.api.v1.model.dto.EmailDto;
+import com.employee.api.v1.model.dto.EmailRequestDto;
 import com.employee.api.v1.model.dto.EmployeeDto;
 import com.employee.api.v1.model.dto.EmployeeSearchDto;
 import com.employee.api.v1.model.dto.EmployeeSearchResultsDto;
@@ -14,7 +14,6 @@ import com.employee.utils.EmailUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -145,13 +144,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             taskId = (scheduledTasks.size()) + "";
         }
 
-        EmailDto emailDto = getEmailData();
+        EmailRequestDto emailRequestDto = getEmailData();
         Runnable task = () -> {
-            try {
-                emailUtil.sendMail(emailDto);
-            } catch (JobExecutionException e) {
-                throw new RuntimeException(e);
-            }
+            emailUtil.sendMail(emailRequestDto);
         };
         ScheduledFuture<?> future = taskScheduler.schedule(task, new CronTrigger(cron));
         scheduledTasks.put(taskId, future);
@@ -159,13 +154,12 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
 
-    private EmailDto getEmailData() {
-        EmailDto emailDto = EmailDto.builder()
-                .from("satyakaveti@gmail.com")
+    private EmailRequestDto getEmailData() {
+        EmailRequestDto emailRequestDto = EmailRequestDto.builder()
                 .subject("All Emp Data" + new Date())
-                .to(new String[]{"satyakaveti@gmail.com"})
-                .cc(new String[]{"satyakaveti@gmail.com"})
-                .attachmentLinks(null).build();
+                .to("satyakaveti@gmail.com")
+                .cc("satyakaveti@gmail.com")
+                .build();
         StringBuilder body = new StringBuilder();
         body.append("All Employees data as of ").append(new Date().toString());
         body.append(" ===================================== ");
@@ -174,8 +168,8 @@ public class EmployeeServiceImpl implements EmployeeService {
             EmployeeDto dto = employeeMapper.toDto(emp);
             body.append(dto.toString()).append(" <br>");
         }
-        emailDto.setBody(body.toString());
-        return emailDto;
+        emailRequestDto.setBody(body.toString());
+        return emailRequestDto;
     }
 
 }

@@ -1,20 +1,11 @@
 package com.employee.utils;
 
-import com.employee.api.v1.model.dto.EmailDto;
-import com.querydsl.core.util.ArrayUtils;
+import com.employee.api.v1.model.dto.EmailRequestDto;
+import com.employee.api.v1.model.dto.EmployeeDto;
 import lombok.extern.slf4j.Slf4j;
-import org.quartz.JobExecutionException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author satyakaveti
@@ -24,42 +15,44 @@ import java.time.LocalDateTime;
 public class EmailUtil {
 
 
-    @Autowired
-    private JavaMailSender mailSender;
 
+    public static String employeeMailTemplate(List<EmployeeDto> employees) {
+        StringBuilder html = new StringBuilder();
+        html.append("<!DOCTYPE html>");
+        html.append("<html>");
+        html.append("<head>");
+        html.append("<title>Employee Table</title>");
+        html.append("</head>");
+        html.append("<body>");
+        html.append("<table style=\"border-collapse: collapse;\">");
+        html.append("<thead>");
+        html.append("<tr>");
+        html.append("<th style=\"background-color: lightgrey; border: 1px solid black;\">ID</th>");
+        html.append("<th style=\"background-color: lightgrey; border: 1px solid black;\">Name</th>");
+        html.append("<th style=\"background-color: lightgrey; border: 1px solid black;\">Salary</th>");
+        html.append("<th style=\"background-color: lightgrey; border: 1px solid black;\">City</th>");
+        html.append("</tr>");
+        html.append("</thead>");
+        html.append("<tbody>");
 
-    public MimeMessage getMessage(EmailDto emailDto) throws MessagingException {
-        MimeMessage message = mailSender.createMimeMessage();
-        MimeMessageHelper messageHelper = new MimeMessageHelper(message, true, StandardCharsets.UTF_8.toString());
-        messageHelper.setSubject(emailDto.getSubject());
-        messageHelper.setText(emailDto.getBody(), true);
-
-        if (!StringUtils.isEmpty(emailDto.getFrom())) {
-            messageHelper.setFrom(emailDto.getFrom());
+        for (EmployeeDto employee : employees) {
+            html.append("<tr>");
+            html.append("<td style=\"border: 1px solid black;\">").append(employee.getId()).append("</td>");
+            html.append("<td style=\"border: 1px solid black;\">").append(employee.getName()).append("</td>");
+            html.append("<td style=\"border: 1px solid black;\">").append(employee.getSalary()).append("</td>");
+            html.append("<td style=\"border: 1px solid black;\">").append(employee.getCity()).append("</td>");
+            html.append("</tr>");
         }
 
-        String[] to = emailDto.getTo();
-        messageHelper.setTo(to);
+        html.append("</tbody>");
+        html.append("</table>");
+        html.append("</body>");
+        html.append("</html>");
 
-        String[] cc = emailDto.getCc();
-
-        if (!ArrayUtils.isEmpty(cc)) {
-            messageHelper.setCc(cc);
-        }
-        return message;
+        return html.toString();
     }
 
+    public void sendMail(EmailRequestDto emailRequestDto) {
 
-    public void sendMail(EmailDto emailDto) throws JobExecutionException {
-
-        try {
-            log.info("Scheduler Triggered at : {}", LocalDateTime.now());
-            //mailSender.send(getMessage(emailDto));
-            log.info(" ===== > mail sent....: \n {} \n \n", emailDto);
-        } catch (Exception ex) {
-            log.error("Failed to send email notification.", ex);
-            throw new JobExecutionException(ex);
-        }
     }
-
 }

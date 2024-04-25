@@ -2,9 +2,11 @@ package com.employee.api.v1.model.mapper;
 
 
 import com.employee.api.v1.model.dto.UserDto;
-import com.employee.api.v1.model.mapper.BaseMapper;
 import com.employee.dao.entity.User;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.Named;
+import org.mapstruct.ReportingPolicy;
 
 import java.util.Date;
 import java.util.List;

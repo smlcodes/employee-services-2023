@@ -1,5 +1,6 @@
 
 package com.employee.dao.repository.impl;
+
 import com.employee.api.v1.model.dto.EmployeeSearchDto;
 import com.employee.api.v1.model.dto.EmployeeSearchResultsDto;
 import com.employee.api.v1.model.mapper.EmployeeSearchResultMapper;
@@ -19,10 +20,9 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
  

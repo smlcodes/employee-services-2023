@@ -1,11 +1,13 @@
 package com.employee.api.v1;
 
 import com.employee.ApplicationConstants;
+import com.employee.constants.ReportTypeEnum;
 import com.employee.exception.BusinessException;
 import com.employee.service.ReportsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.FileSystemResource;
@@ -34,7 +36,7 @@ public class ReportsController {
     @Autowired
     private final ReportsService reportsService;
 
-    @GetMapping("/jasper/employee")
+    @GetMapping("/jasper/emp")
     public ResponseEntity<Resource> employeeJasperReport(@RequestParam("fileType") String fileType) {
         try {
             String downloadFilePath = reportsService.employeeJasperReport(fileType);
@@ -51,6 +53,70 @@ public class ReportsController {
             throw new BusinessException("Downloading Employees JSON Failed, Due to : " + e.getMessage());
         }
     }
+
+
+    @GetMapping("/jasper/emp24")
+    public ResponseEntity<Resource> employeeJasperReport24(@RequestParam("fileType") String fileType) throws Exception {
+
+        ReportTypeEnum report = ReportTypeEnum.getReportTypeByCode(fileType);
+        log.info("Eum :"+report);
+        byte[] bytes = reportsService.employeeJasperReport24(fileType);
+       // byte[] bytes = reportsService.employeeJasperReportInBytes(fileType);
+        if (null != bytes) {
+            ByteArrayResource resource = new ByteArrayResource(bytes);
+            String fileName = "Employee24_JasperReport" + "_" + LocalDateTime.now() + report.getExtension();
+            return ResponseEntity.ok()
+                    .header(com.google.common.net.HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                    .contentLength(resource.contentLength())
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(resource);
+        } else {
+            throw new BusinessException("File Download Failed");
+        }
+    }
+
+
+    @GetMapping("/jasper/user")
+    public ResponseEntity<Resource> userJasperReport(@RequestParam("fileType") String fileType) throws Exception {
+
+        ReportTypeEnum report = ReportTypeEnum.getReportTypeByCode(fileType);
+        log.info("Eum :"+report);
+        byte[] bytes = reportsService.userJasperReport(fileType);
+        // byte[] bytes = reportsService.employeeJasperReportInBytes(fileType);
+        if (null != bytes) {
+            ByteArrayResource resource = new ByteArrayResource(bytes);
+            String fileName = "userJasperReport" + "_" + LocalDateTime.now() + report.getExtension();
+            return ResponseEntity.ok()
+                    .header(com.google.common.net.HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                    .contentLength(resource.contentLength())
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(resource);
+        } else {
+            throw new BusinessException("File Download Failed");
+        }
+    }
+
+
+    @GetMapping("/jasper/subreport")
+    public ResponseEntity<Resource> jasperSubreport(@RequestParam("fileType") String fileType) throws Exception {
+
+        ReportTypeEnum report = ReportTypeEnum.getReportTypeByCode(fileType);
+        log.info("Eum :"+report);
+        byte[] bytes = reportsService.jasperSubreport(fileType);
+        if (null != bytes) {
+            ByteArrayResource resource = new ByteArrayResource(bytes);
+            String fileName = "jasperSubreport" + "_" + LocalDateTime.now() + report.getExtension();
+            return ResponseEntity.ok()
+                    .header(com.google.common.net.HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                    .contentLength(resource.contentLength())
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(resource);
+        } else {
+            throw new BusinessException("File Download Failed");
+        }
+    }
+
+
 
 
     @GetMapping("/carbone/employee")

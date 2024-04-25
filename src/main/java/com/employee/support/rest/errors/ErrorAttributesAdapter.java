@@ -1,24 +1,22 @@
 package com.employee.support.rest.errors;
 
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toList;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.validation.ConstraintViolationException;
-
+import me.alidg.errors.HttpError;
+import me.alidg.errors.HttpError.CodedMessage;
+import me.alidg.errors.adapter.HttpErrorAttributesAdapter;
+import me.alidg.errors.conf.ErrorsProperties.ArgumentExposure;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import me.alidg.errors.HttpError;
-import me.alidg.errors.HttpError.CodedMessage;
-import me.alidg.errors.adapter.HttpErrorAttributesAdapter;
-import me.alidg.errors.conf.ErrorsProperties.ArgumentExposure;
+import javax.validation.ConstraintViolationException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static java.util.stream.Collectors.collectingAndThen;
+import static java.util.stream.Collectors.toList;
 
 /**
  * 
