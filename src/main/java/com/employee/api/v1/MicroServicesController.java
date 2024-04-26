@@ -4,10 +4,8 @@ import com.employee.ApplicationConstants;
 import com.employee.api.v1.model.dto.EmailRequestDto;
 import com.employee.service.MicroService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author satyakaveti on 10/04/24
@@ -21,15 +19,13 @@ public class MicroServicesController {
     MicroService microService;
 
     @PostMapping("/email")
-    private void sendEmployeeDataMail(@RequestBody EmailRequestDto dto){
-        microService.sendEmployeeDataMail(dto);
+    private ResponseEntity<String> sendEmail(@RequestBody EmailRequestDto dto) {
+        return microService.sendEmployeeDataMail(dto);
     }
 
-    @PostMapping("/email/reports")
-    private void sendEmployeeDataMailWithAttachments(@RequestBody EmailRequestDto dto){
-        microService.sendEmployeeDataMailWithAttachments(dto);
+    @GetMapping("/email")
+    private ResponseEntity<String> getEmail() {
+        return microService.getEmail();
     }
-
-
 
 }

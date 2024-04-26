@@ -1,6 +1,7 @@
 package com.employee.service;
 
 import com.employee.api.v1.model.dto.EmailRequestDto;
+import org.springframework.http.ResponseEntity;
 
 /**
  * @author satyakaveti on 10/04/24
@@ -8,8 +9,7 @@ import com.employee.api.v1.model.dto.EmailRequestDto;
 public interface MicroService {
 
 
-    public void sendEmployeeDataMail(EmailRequestDto dto);
+    public ResponseEntity<String> sendEmployeeDataMail(EmailRequestDto dto);
 
-    public void sendEmployeeDataMailWithAttachments(EmailRequestDto dto);
-
+    ResponseEntity<String> getEmail();
 }
