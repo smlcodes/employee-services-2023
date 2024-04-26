@@ -1,6 +1,9 @@
 package com.employee;
 
 import com.employee.constants.DepartmentEnum;
+import com.employee.patterns.factory.ReportTypeEnum;
+import com.employee.patterns.factory.ReportWriter;
+import com.employee.patterns.factory.ReportWriterFactory;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
@@ -60,6 +63,7 @@ public class Application {
 
         //Checking Enum
         enumChecking();
+        factoryPatternCheck();
 
 	}
 
@@ -71,6 +75,21 @@ public class Application {
 
         DepartmentEnum.CSE.print();
         DepartmentEnum.MBBS.print();
+    }
+
+
+    public static void factoryPatternCheck() {
+
+        log.info("\n \n \n factoryPatternCheck \n *********************");
+        ReportWriter pdfReportWriter = ReportWriterFactory.createReportWriter(ReportTypeEnum.PDF);
+        pdfReportWriter.writeReport();
+
+        ReportWriter xmlReportWriter = ReportWriterFactory.createReportWriter(ReportTypeEnum.XML);
+        xmlReportWriter.writeReport();
+
+        ReportWriter wordReportWriter = ReportWriterFactory.createReportWriter(ReportTypeEnum.WORD);
+        wordReportWriter.writeReport();
+        log.info("\n  factoryPatternCheck \n \n \n *********************");
     }
 
 
