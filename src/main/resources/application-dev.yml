@@ -144,32 +144,14 @@ keycloak:
 # Application specific properties
 app:
   maxSequence: 99
-  resource:
-    file:
-      path: /home
-    urls:
-      - name: integration
-        end-point: http://localhost:8607/integration-sa
-        username: root
-      - name: des
-        #for local -> https://customsdev.cargoes.com/des
-        end-point: https://customsdev.cargoes.com/des-sa
-        username: root
+  isEmailEnabledForUserCreation: true
+  isFeignEnabled: true
+
 
 feign:
-  client:
-    config:
-      default:
-        loggerLevel: basic
     url:
-      rdm: https://customsdev.cargoes.com/rdm-sa
-      nsm: https://customsdev.cargoes.com/nsm
-      tariff: https://customsdev.cargoes.com/tariff-sa
-      aum: https://customsdev.cargoes.com/aum-sa
-      reports: https://customsdev.cargoes.com/reports-sa
-      unifiedsource: https://customsdev.cargoes.com/unifiedsource
-      dms: https://customsdev.cargoes.com/dms
-      des: https://customsdev.cargoes.com/des
+      email: http://localhost:8992/email-service
+
 eureka:
   client:
     enabled: false

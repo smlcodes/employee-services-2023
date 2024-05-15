@@ -10,6 +10,9 @@ import com.employee.dao.repository.EmployeeRepository;
 import com.employee.exception.BusinessException;
 import com.employee.exception.EntityNotFoundException;
 import com.employee.service.EmployeeService;
+import com.employee.service.MicroService;
+import com.employee.support.feign.EmailFeignClient;
+import com.employee.utils.ApplicationUtils;
 import com.employee.utils.EmailUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -59,6 +62,13 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Autowired
     private EmailUtil emailUtil;
 
+    @Autowired
+    private ApplicationUtils applicationUtils;
+
+    @Autowired
+    private EmailFeignClient emailFeignClient;
+
+
     @Override
     public Page<EmployeeSearchResultsDto> searchAllEmployee(Pageable pageRequest, EmployeeSearchDto searchCriteria) {
         return employeeRepository.employeeSearchCriteria(pageRequest, searchCriteria);
@@ -73,7 +83,16 @@ public class EmployeeServiceImpl implements EmployeeService {
             Employee employee = getEmployee(employeeId, createRequest);
             employeeMapper.toEntity(employeeDto, employee);
             Employee entity = employeeRepository.save(employee);
+
+            if(applicationUtils.getIsEmailEnabledForUserCreation()){
+                log.info("Send Mail when ever new user created, by email service");
+                EmailRequestDto emailRequestDto = EmailUtil.getEmailDtoFromEmployee(employeeDto);
+                emailFeignClient.sendEmail(emailRequestDto);
+
+            }
+            log.info("save Completed :::: employeeId:{}", entity.getId());
             return employeeMapper.toDto(entity);
+
         } catch (Exception ex) {
             log.error("Error while saving employee", ex);
             throw new BusinessException("Save Failed");

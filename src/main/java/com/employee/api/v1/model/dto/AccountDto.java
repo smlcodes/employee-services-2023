@@ -41,4 +41,14 @@ public class AccountDto implements Serializable {
     @DateTimeFormat(pattern = ApplicationConstants.DATE_FORMAT)
     private LocalDate dob;
 
+
+    @Override
+    public String toString() {
+        return "AccountDto{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", dob=" + dob +
+                '}';
+    }
 }

@@ -2,8 +2,10 @@ package com.employee.utils;
 
 import com.employee.api.v1.model.dto.EmailRequestDto;
 import com.employee.api.v1.model.dto.EmployeeDto;
+import com.employee.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
@@ -55,4 +57,18 @@ public class EmailUtil {
     public void sendMail(EmailRequestDto emailRequestDto) {
 
     }
+
+    public static EmailRequestDto getEmailDtoFromEmployee(EmployeeDto emp){
+            if(ObjectUtils.isEmpty(emp.getAccount().getEmail()))
+                emp.getAccount().setEmail("smlcodes@gmail.com");
+            return EmailRequestDto.builder()
+                    .subject(emp.getName() + " Account Created")
+                    .body("BODY : "+emp)
+                    .to(emp.getAccount().getEmail())
+                    .cc(emp.getAccount().getEmail())
+                    .build();
+
+    }
+
+
 }

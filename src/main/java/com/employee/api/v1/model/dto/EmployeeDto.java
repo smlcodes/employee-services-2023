@@ -31,12 +31,14 @@ import java.util.List;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class EmployeeDto implements Serializable {
 
+
+
     @XmlElement(required = true)
     private Long id;
 
     @XmlElement(required = true)
     @NotNull
-    @Size(min = 4, max = 10)
+    @Size(min = 2, max = 20)
     private String name;
 
     @XmlElement(name = "salary", required = true)
@@ -59,5 +61,23 @@ public class EmployeeDto implements Serializable {
 
     private Date createdDate;
     private Date modifiedDate;
+
+
+    @Override
+    public String toString() {
+        return "EmployeeDto{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", salary=" + salary +
+                ", city='" + city + '\'' +
+                ", account=" + account +
+                ", documentList=" + documentList +
+                ", createdBy='" + createdBy + '\'' +
+                ", modifiedBy='" + modifiedBy + '\'' +
+                ", createdDate=" + createdDate +
+                ", modifiedDate=" + modifiedDate +
+                '}';
+    }
+
 
 }
