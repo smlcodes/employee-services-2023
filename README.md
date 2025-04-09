@@ -29,5 +29,13 @@
 
 
 
+# 1. MicroServices
+
+- EmployeeService2023 - `http://localhost:8990/empapp`
+- EmailService - `http://localhost:8992/email-service`
+
+
+
+
 # Reference :
  - Postman Online(smlcodes@gmail) : https://identity.getpostman.com/accounts

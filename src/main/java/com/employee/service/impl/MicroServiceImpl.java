@@ -57,7 +57,7 @@ public class MicroServiceImpl implements MicroService {
                 resource = Resource.builder()
                         .data(emailRequestDto)
                         .name("SEND_EMAIL")
-                        .uri(new URI("http://localhost:8992/email-service/api/v1/send"))
+                        .uri(new URI("http://localhost:8301/email-service/api/v1/send"))
                         .requestType(HttpMethod.POST)
                         .responseClass(String.class).build();
             } catch (URISyntaxException e) {
@@ -78,7 +78,7 @@ public class MicroServiceImpl implements MicroService {
         try {
             Resource resource = Resource.builder()
                     .name("GET_EMAIL")
-                    .uri(new URI("http://localhost:8992/email-service/api/v1/get"))
+                    .uri(new URI("http://localhost:8301/email-service/api/v1/get"))
                     .requestType(HttpMethod.GET)
                     .responseClass(String.class).build();
 

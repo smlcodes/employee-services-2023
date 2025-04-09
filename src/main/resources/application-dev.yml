@@ -10,7 +10,7 @@
 # Running Server properties
 server:
   address: # bind address
-  port: 8990  # port must be unique for each deployed Module in the same environment
+  port: 8201  # port must be unique for each deployed Module in the same environment
   servlet:
     context-path: /empapp
   error:

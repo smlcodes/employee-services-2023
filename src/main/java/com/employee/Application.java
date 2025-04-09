@@ -55,7 +55,7 @@ public class Application {
                 env.getActiveProfiles()
         );
 
-        log.info("\n Swagger : http://localhost:" + env.getProperty("server.port") + "/empapp/swagger-ui/index.html");
+        log.info("\n Swagger : http://localhost:" + env.getProperty("server.port") + "/empapp/swagger-ui/index.html    (Search as: /empapp/v2/api-docs)");
         log.info("Basic base64(username:password) :dXNlcjpwYXNzd29yZA==");
     }
 

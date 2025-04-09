@@ -50,12 +50,6 @@ public class EmployeeController {
 
     private final EmployeeMapper employeeMapper;
 
-    @ApiOperation("Returns a page of all Employee list")
-    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success"), @ApiResponse(code = 400, message = "Bad Request"), @ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 403, message = "Unauthorized")})
-    @PostMapping("/search")
-    public Page<EmployeeSearchResultsDto> searchAllEmployee(Pageable pageRequest, @RequestBody EmployeeSearchDto searchCriteria) {
-        return employeeService.searchAllEmployee(pageRequest, searchCriteria);
-    }
 
     @ApiOperation("Create a new Employee or update exist ")
     @PostMapping
@@ -72,6 +66,14 @@ public class EmployeeController {
     @GetMapping("/all")
     public List<EmployeeDto> getAllEmployees() {
         return employeeService.getAllEmployees();
+    }
+
+
+    @ApiOperation("Returns a page of all Employee list")
+    @ApiResponses(value = {@ApiResponse(code = 200, message = "Success"), @ApiResponse(code = 400, message = "Bad Request"), @ApiResponse(code = 500, message = "Internal Server Error"), @ApiResponse(code = 403, message = "Unauthorized")})
+    @PostMapping("/search")
+    public Page<EmployeeSearchResultsDto> searchAllEmployee(Pageable pageRequest, @RequestBody EmployeeSearchDto searchCriteria) {
+        return employeeService.searchAllEmployee(pageRequest, searchCriteria);
     }
 
 
