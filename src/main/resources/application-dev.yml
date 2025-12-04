@@ -93,8 +93,16 @@ spring:
     web:
       pageable:
         max-page-size: 100
-
-
+  kafka:
+    bootstrap-servers: localhost:9092 # Your Kafka broker address
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: my-group # Required for a consumer group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      auto-offset-reset: earliest # Start from beginning if no offset
 
 # Logging setup
 logging:

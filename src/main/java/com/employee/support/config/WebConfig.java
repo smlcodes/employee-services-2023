@@ -75,39 +75,35 @@ public class WebConfig implements WebMvcConfigurer {
 	 */
 	@Bean
 	public LocaleResolver localeResolver() {
-		// Implementation of LocaleResolver class
 		AcceptHeaderLocaleResolver localeResolver = new AcceptHeaderLocaleResolver() {
 			@Override
 			public Locale resolveLocale(HttpServletRequest request) {
 				String localeString = request.getParameter(ApplicationConstants.LOCALE_QUERYPARAM);
-				return StringUtils.hasText(localeString) 
+				return StringUtils.hasText(localeString)
 						? StringUtils.parseLocaleString(localeString)
 						: super.resolveLocale(request);
 			}
 		};
 
-		// Set the default locale
-		localeResolver.setDefaultLocale( StringUtils.parseLocaleString(this.defaultLocale) );				
-				
+		// ✅ Parse defaultLocale safely
+		localeResolver.setDefaultLocale(Locale.forLanguageTag(defaultLocale));
 		log.info("Default Locale set to: {}", localeResolver.getDefaultLocale());
-		
-		return localeResolver;	 		
+
+		return localeResolver;
 	}
-	
-    @Bean
-    public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
-        messageSource.setBasename(this.messagesBasename);
-        messageSource.setDefaultEncoding("UTF-8");
-        
-        return messageSource;
-    }
-   
+
+	@Bean
+	public MessageSource messageSource() {
+		ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+		messageSource.setBasename(messagesBasename);
+		messageSource.setDefaultEncoding("UTF-8");
+		return messageSource;
+	}
+
 	@Bean
 	public LocalValidatorFactoryBean validator() {
 		LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
-		bean.setValidationMessageSource(this.messageSource());
-
+		bean.setValidationMessageSource(messageSource());
 		return bean;
 	}
 }

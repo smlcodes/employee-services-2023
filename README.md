@@ -7,9 +7,9 @@
 - [x] Auditing/Versioning with Spring Data Envers
 - [x] MapStruct
 - [x] Dynamic Task Scheduling
-- [ ] Create XML schema from DTO / Entity Classes
-- [ ] Generate Java Classes(DTOs) from XML Schema Documenet
-- [ ] 
+- [x] Create XML schema from DTO / Entity Classes
+- [ x] Generate Java Classes(DTOs) from XML Schema Documenet
+- [ x] KAFKA 
 - [ ] 
 - [ ] 
 - [ ] 
