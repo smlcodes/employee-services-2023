@@ -1,4 +1,4 @@
-package com.employee.api.v1;
+package com.employee.api.v1.kafka;
 
 import com.employee.ApplicationConstants;
 import com.employee.api.v1.model.KafkaMessageRequest;

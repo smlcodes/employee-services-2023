@@ -99,6 +99,23 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
     }
 
+    @Override
+    public EmployeeDto save(EmployeeDto employeeDto) {
+        log.info("save start :::: employeeId:{}");
+        try {
+
+            Employee employee =new Employee();
+            employeeMapper.toEntity(employeeDto, employee);
+            Employee entity = employeeRepository.save(employee);
+            log.info("save Completed :::: employeeId:{}", entity.getId());
+            return employeeMapper.toDto(entity);
+
+        } catch (Exception ex) {
+            log.error("Error while saving employee", ex);
+            throw new BusinessException("Save Failed");
+        }
+    }
+
 
     @Override
     @Cacheable(value = "employees", key = "#id")
