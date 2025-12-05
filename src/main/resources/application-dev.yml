@@ -158,7 +158,7 @@ app:
 
 feign:
     url:
-      email: http://localhost:8992/email-service
+      email: http://localhost:8301/email-service
 
 eureka:
   client:

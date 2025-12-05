@@ -1,8 +1,10 @@
 package com.employee.api.v1.kafka;
 
 import com.employee.api.v1.model.dto.EmployeeDto;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -11,6 +13,8 @@ import java.util.Date;
  */
 @Data
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class HREmployeeOnboardingEvent {
     private String eventId;
     private String eventType = "HR_EMPLOYEE_ONBOARDING_INITIATED";
