@@ -24,7 +24,7 @@ public class TaskSchedular {
     KafkaProducerService kafkaProducerService;
 
     //Sends a test message to Kafka every 5 second
-    @Scheduled(cron = "*/30 * * * * *") // Every 5 minutes at second 0
+    //@Scheduled(cron = "*/30 * * * * *") // Every 5 minutes at second 0
     public void sendKafkaMessage() throws InterruptedException {
         for (Long i = 0L; i < 10; i++) {
             EmployeeDto dto = EmployeeDto.builder().id(i).name("Name_" + i).build();

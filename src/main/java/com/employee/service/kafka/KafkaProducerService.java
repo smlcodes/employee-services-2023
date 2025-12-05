@@ -1,5 +1,7 @@
 package com.employee.service.kafka;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
@@ -12,12 +14,9 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class KafkaProducerService {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
-    private static final String TOPIC = "my-topic";
-
-    public KafkaProducerService(KafkaTemplate<String, String> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
-    }
+    @Autowired
+    @Qualifier("stringKafkaTemplate")
+    KafkaTemplate<String, String> kafkaTemplate;
 
     public void sendSimpleMessage(String topic, String message) {
         // Simplest form: send to topic with a value

@@ -2,6 +2,9 @@ package com.employee.api.v1.kafka;
 
 import com.employee.api.v1.model.dto.EmployeeDto;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,40 +25,36 @@ import java.util.UUID;
 @Slf4j
 public class HRSystemController {
 
-    private final KafkaTemplate<String, HREmployeeOnboardingEvent> kafkaTemplate;
-
-    public HRSystemController(KafkaTemplate<String, HREmployeeOnboardingEvent> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
-    }
+    @Autowired
+    @Qualifier("jsonKafkaTemplate")
+    KafkaTemplate<String, Object> kafkaTemplate;
 
     @PostMapping("/onboard")
-    public ResponseEntity<Map<String, Object>> onboardEmployee(
-            @RequestBody EmployeeDto request) {
+    public ResponseEntity<?> onboardEmployee(@RequestBody EmployeeDto request) {
 
+        log.info("Preparing onboarding event by HR System");
         String eventId = UUID.randomUUID().toString();
-
         HREmployeeOnboardingEvent event = HREmployeeOnboardingEvent.builder()
                 .eventId(eventId)
                 .timestamp(LocalDateTime.now())
                 .employeeData(request)
                 .build();
 
-        // Publish to Kafka
-        kafkaTemplate.send("employee.onboarding", event.getEmployeeData().getId().toString(), event)
-                .addCallback(
-                        result -> log.info("✅ Onboarding event published: {}", eventId),
-                        ex -> log.error("❌ Failed to publish onboarding event: {}",
-                                ex.getMessage())
-                );
-
-        return ResponseEntity.accepted()
-                .body(Map.of(
-                        "status", "ACCEPTED",
-                        "message", "Employee onboarding initiated",
-                        "eventId", eventId,
-                        "employeeId", event.getEmployeeData().getId(),
-                        "estimatedCompletion", "Within 5 minutes"
-                ));
+        log.info("Sending HREmployeeOnboardingEvent: {}", event);
+        try {
+            // Send asynchronously and wait for response
+            kafkaTemplate.send("employee.onboarding", event.getEmployeeData().getId().toString(), event).get();   // <--- ensures exception will be thrown if Kafka send fails
+            log.info("✅ Successfully published onboarding event: {}", eventId);
+            return ResponseEntity.ok(event);   // return full event JSON (200)
+        } catch (Exception ex) {
+            log.error("❌ Failed to publish onboarding event: {}", ex.getMessage(), ex);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of(
+                            "status", "ERROR",
+                            "message", "Failed to publish onboarding event",
+                            "error", ex.getMessage()
+                    ));
+        }
     }
 
 }
