@@ -9,13 +9,12 @@ import com.employee.utils.EmailUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -43,10 +42,10 @@ public class EmployeeOnboardingService {
     @KafkaListener(
             topics = "employee.onboarding",
             groupId = "employee-group",
-            containerFactory = "kafkaListenerContainerFactory"
+            containerFactory = "employeeListenerContainerFactory"
     )
     public void processOnboardingEvent(HREmployeeOnboardingEvent event) {
-        log.info("📥 Received onboarding event for employee: {}", event.getEmployeeData().getId());
+        log.info("\n\n\n📥 Received onboarding event for employee: {}", event.getEmployeeData().getId());
         try {
             // Step 1: Create employee in database
             EmployeeDto employee = employeeService.save(event.getEmployeeData());
@@ -57,7 +56,7 @@ public class EmployeeOnboardingService {
             // Step 3: Publish success events
             publishSuccessEvents(event);
 
-            log.info("✅ Onboarding completed for employee: {}", employee.getId());
+            log.info("✅ Onboarding completed for employee: {} \n\n\n", employee.getId());
 
         } catch (Exception e) {
             log.error("❌ Onboarding failed for employee {}: {}", event.getEmployeeData().getId(), e.getMessage(), e);
@@ -88,7 +87,7 @@ public class EmployeeOnboardingService {
         Map<String, Object> successEvent = new HashMap<>();
         successEvent.put("eventId", UUID.randomUUID().toString());
         successEvent.put("eventType", "EMPLOYEE_ONBOARDING_COMPLETED");
-        successEvent.put("timestamp", LocalDateTime.now().toString());
+        successEvent.put("timestamp", new Date());
         successEvent.put("originalEventId", originalEvent.getEventId());
         successEvent.put("employeeData", originalEvent.getEmployeeData().getId());
         successEvent.put("originalEvent", originalEvent);
@@ -101,7 +100,7 @@ public class EmployeeOnboardingService {
         Map<String, Object> failureEvent = new HashMap<>();
         failureEvent.put("eventId", UUID.randomUUID().toString());
         failureEvent.put("eventType", "EMPLOYEE_ONBOARDING_FAILED");
-        failureEvent.put("timestamp", LocalDateTime.now().toString());
+        failureEvent.put("timestamp", new Date());
         failureEvent.put("originalEventId", originalEvent.getEventId());
         failureEvent.put("employeeId", originalEvent.getEmployeeData().getId());
         failureEvent.put("failureType", failureType); // e.g., "VALIDATION_FAILED", "PROCESSING_FAILED"

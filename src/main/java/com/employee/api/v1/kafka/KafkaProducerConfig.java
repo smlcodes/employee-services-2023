@@ -1,12 +1,14 @@
 package com.employee.api.v1.kafka;
 
+import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringDeserializer;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
+import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
+import org.springframework.kafka.core.*;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
@@ -48,6 +50,31 @@ public class KafkaProducerConfig {
         return new KafkaTemplate<>(jsonProducerFactory());
     }
 
- 
+
+    @Bean
+    public ConsumerFactory<String, HREmployeeOnboardingEvent> onboardingConsumerFactory() {
+
+        Map<String, Object> props = new HashMap<>();
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092,localhost:9093");
+        props.put(ConsumerConfig.GROUP_ID_CONFIG, "employee-group");
+        props.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
+
+        return new DefaultKafkaConsumerFactory<>(
+                props,
+                new StringDeserializer(),
+                new JsonDeserializer<>(HREmployeeOnboardingEvent.class));
+    }
+
+    @Bean(name = "employeeListenerContainerFactory")
+    public ConcurrentKafkaListenerContainerFactory<String, HREmployeeOnboardingEvent>
+    onboardingKafkaListenerContainerFactory() {
+
+        ConcurrentKafkaListenerContainerFactory<String, HREmployeeOnboardingEvent> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+
+        factory.setConsumerFactory(onboardingConsumerFactory());
+        return factory;
+    }
+
 }
 

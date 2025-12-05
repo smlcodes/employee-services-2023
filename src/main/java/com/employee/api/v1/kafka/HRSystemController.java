@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
 
@@ -36,7 +36,7 @@ public class HRSystemController {
         String eventId = UUID.randomUUID().toString();
         HREmployeeOnboardingEvent event = HREmployeeOnboardingEvent.builder()
                 .eventId(eventId)
-                .timestamp(LocalDateTime.now())
+                .timestamp(new Date())
                 .employeeData(request)
                 .build();
 
